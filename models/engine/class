@@ -1,8 +1,4 @@
-from datetime import datetime
-import uuid
-
-class BaseModel:
-    """Base model class that defines all common attributes/methods for other classes."""
+se model class that defines all common attributes/methods for other classes."""
     globals = {}
 
     def __init__(self, *args, **kwargs):

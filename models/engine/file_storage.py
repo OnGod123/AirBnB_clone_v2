@@ -1,7 +1,5 @@
-#!/usr/bin/python3
-"""This module defines a class to manage file storage for hbnb clone"""
 import json
-
+from models.base_model import BaseModel
 
 class FileStorage:
     """This class manages storage of hbnb models in JSON format"""
@@ -14,7 +12,8 @@ class FileStorage:
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
-        self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
+        key = "{}.{}".format(obj.to_dict()['__class__'], obj.id)
+        self.all()[key] = obj
 
     def save(self):
         """Saves storage dictionary to file"""
@@ -36,19 +35,22 @@ class FileStorage:
         from models.review import Review
 
         classes = {
-                    'BaseModel': BaseModel, 'User': User, 'Place': Place,
-                    'State': State, 'City': City, 'Amenity': Amenity,
-                    'Review': Review
-                  }
+            'BaseModel': BaseModel, 'User': User, 'Place': Place,
+            'State': State, 'City': City, 'Amenity': Amenity,
+            'Review': Review
+        }
         try:
             temp = {}
             with open(FileStorage.__file_path, 'r') as f:
                 temp = json.load(f)
                 for key, val in temp.items():
-                        self.all()[key] = classes[val['__class__']](**val)
+                    class_name = val['__class__']
+                    obj = classes[class_name](**val)
+                    self.all()[key] = obj
         except FileNotFoundError:
             pass
 
     def close(self):
-        """method for deserializing the JSON file to objects"""
+        """Method for deserializing the JSON file to objects"""
         self.reload()
+

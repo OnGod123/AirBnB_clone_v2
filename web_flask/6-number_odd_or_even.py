@@ -38,3 +38,7 @@ def number_odd_or_even(n):
     odd_or_even = 'even' if n % 2 == 0 else 'odd'
     return render_template('odd_or_even.html', n=n, odd_or_even=odd_or_even)
 
+
+if __name__ == '__main__':
+    port = 5000
+    app.run(host='0.0.0.0', port=port)
